@@ -1,0 +1,13 @@
+{
+  "exampleReadHost.ps1": "6d98318cec5a38de44bedb5d119cd30a5e14829bd5875c44d56207c694486ff9",
+  "powershellError.ps1": "81c50979a55251c4853502b84a8ff0f2abf024b9f5ac91b83a3f5929237495f6",
+  "requestInput.ps1": "e281578298df38a3350ef2c6913a8288a5d1353a01cca0169434a76488067e6f",
+  "restartServices.ps1": "c303205a86af903c513ea493942e07fbba8f71daf58df52fca76af5b9eb776a9",
+  "scriptAlteration.ps1": "3c54219dfc12e56b41f2efcf59c3bc9fc0cf7457a2dc9fe80bc4e3d546b0e02b",
+  "secondScript.ps1": "e3132d552999b6a42abd92b7c80ee7ee7da103b91c70641892ef3ccca48e4791",
+  "simpleWriteHost.ps1": "a89b5b5c47f959a6b150b48b91565a211587f02977c92b8268a4caeb88115afb",
+  "sqlQuery.ps1": "d8cb9e87cd3c624ec23d06df43b759849566e6fceb0f3a7c3e2e36bbd991ea15",
+  "staticInput.ps1": "689a188bcd7616ca4b525d5430e4f4184a90f8966476c997db4d3284d86817b4",
+  "styleOutput.ps1": "475165ffe373743adef095f6eb5c965dbcdfacbe635152cb3f2d8e64557eea1f",
+  "test/file.ps1": "b677f4cd719618500a2d4e25d89f5685f6cfbc36cb5a01793dc2784e93fa2caf"
+}

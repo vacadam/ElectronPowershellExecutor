@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="assets/alpine.js"></script> <!-- alpine.js @3.14.16 -->
+    
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+</head>
+<body class="overflow-hidden rounded-none font-chakra">
+
+    <div id="app" class="flex flex-col max-w-[800px] h-full">
+
+        <div id="titleBar" class="flex flex-row items-start justify-between w-full h-8 text-gray-200 select-none">
+            <div class="flex items-center justify-start w-full h-8 bg-epe" style="-webkit-app-region: drag">
+                <div id="startButton" class="flex h-8 px-4">
+                    <span class="self-center mx-auto text-sm font-semibold uppercase drop-shadow-svg">EPE - Electron PowerShell Executor</span>
+                </div>
+                <div id="appVersion" class="text-xs text-gray-300"></div>
+            </div>
+            <div id="windowControl" class="flex flex-row items-center justify-end h-8 px-0.5 bg-epe space-x-1">
+                <div id="minimizeWindow" class="rounded-sm cursor-pointer minimizeWindow hover:text-gray-200 hover:bg-epe-active size-7">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="m-1 size-5 drop-shadow-svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                    </svg>                     
+                </div>
+                <div id="closeApp" class="rounded-sm cursor-pointer closeApp hover:text-gray-200 hover:bg-epe-active size-7">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="m-1 size-5 drop-shadow-svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>                      
+                </div>
+            </div>
+        </div>
+
+
+        <div id="main" class="flex flex-row w-full h-[468px] border border-gray-500 dark:border-gray-700">
+
+            <div id="buttonsArea" class="min-h-full min-w-72 w-72">
+
+                <div id="menu-overlays" class="text-gray-900 dark:text-gray-300">
+                    <div id="admin-rights-missing" class="absolute z-40 bg-gray-300/90 dark:bg-gray-900/90 backdrop-blur-sm h-[466px] w-72">
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="text-red-600 warningIcon size-16">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.25-8.25-3.286Zm0 13.036h.008v.008H12v-.008Z" />
+                            </svg>                      
+                            <div class="flex flex-col h-10 p-4 text-center">
+                                <span class="pb-2 font-semibold">Unable to continue!</span>
+                                <span>You must run the application as an administrator; otherwise, you won't be able to execute commands.</span>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div id="command-in-progress" class="absolute z-30 hidden bg-gray-300/90 dark:bg-gray-900/90 backdrop-blur-sm h-[466px] w-72">
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <div class="relative w-24 h-24">
+                                <span class="loader"></span>
+                            </div>
+                            <div class="h-10 p-4 font-semibold text-center">please wait ...</br>execution in progress</div>
+                        </div>
+                    </div>
+    
+                    <div class="absolute z-30 two-step-confirmation">
+                        <div id="confirmationWindowOverlay" class="absolute hidden text-sm bg-gray-300/90 dark:bg-gray-900/90 backdrop-blur-sm h-[466px] w-72">
+                            <div class="flex flex-col h-full px-3 py-5 justify-evenly">
+                                <div class="flex flex-col items-center font-semibold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="text-red-600 warningIcon size-16">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.25-8.25-3.286Zm0 13.036h.008v.008H12v-.008Z" />
+                                    </svg>                          
+                                    <div id="confirmationWindowMessage" class="mt-6 text-center">
+                                        <!--confirmation message-->
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="w-full">
+                                        <div id="confirmConfirmationWindowButton" data-command="" class="rounded-sm command-button confirm-button group">
+                                            <!--name of the button-->
+                                        </div>
+                                    </div>
+                                    <div id="cancelConfirmationWindowButton" class="underline duration-150 cursor-pointer hover:font-semibold">cancel execution</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="buttons" class="flex flex-col items-center w-full h-full p-3 space-y-1 overflow-y-scroll text-sm text-gray-700 bg-gray-300 dark:text-gray-200 dark:bg-gray-800 overflow-x-none scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-500 ">
+                    <div class="flex flex-col self-start w-full">
+                        <div id="favorites" x-show="expand1" class="space-y-1 has-favorites:pt-1"><!--Favorite buttons--></div>
+                    </div>
+                    <!--Buttons-->
+                </div>
+
+            </div>
+
+            <div class="flex flex-col w-[512px] h-full bg-gray-300 dark:bg-gray-800">
+                <div id="readHostWindow" class="flex flex-row items-center justify-start hidden h-16 px-4 space-x-3 text-gray-700 dark:text-gray-300">
+                    <input id="readHost" type="text" class="w-2/3 input-field pulsing" required>
+                    <div class="flex px-3 py-1 text-gray-200 duration-150 rounded-sm cursor-pointer select-none bg-epe hover:bg-epe-active hover:pop button-glow dark:button-glow-dark">
+                        <span id="submitReadHost" class="mx-auto text-sm font-medium duration-150 drop-shadow-btn">
+                            Submit
+                        </span>
+                    </div>
+                </div>
+                <div id="output" class="w-[510px] h-full px-4 py-2 overflow-y-scroll text-sm text-gray-700 bg-gray-300 cursor-default overflow-x-clip dark:text-gray-300 dark:bg-gray-800 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-500 *:output font-chakra">
+                    <!--Output goes here-->
+                </div>
+            </div>
+
+            <div id="appInfoWindow" class="absolute hidden z-50 w-[798px] h-[468px] text-gray-800 dark:text-gray-300 bg-gray-300/90 top-8 dark:bg-gray-800/90 backdrop-blur-sm ">
+
+                <div id="closeAppInfoWindow" class="absolute rounded-sm w-20 bg-gray-400 dark:bg-gray-900 top-[428px] left-[360px] cursor-pointer hover:bg-epe dark:hover:bg-epe hover:text-gray-300 border border-epe">
+                    <div class="py-0.5 text-center">Close</div>
+                </div>
+    
+                <div x-data="{ tab : 'information'}" class="flex flex-col w-full h-full p-8 pb-12 overflow-y-scroll scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-500">
+                    <div class="flex select-none flex-row items-end justify-start mt-2 space-x-0.5 text-gray-200 cursor-pointer">
+                        <div @click="tab = 'information'" :class="{ 'bg-gray-500 dark:bg-gray-900/80 pb-2': tab === 'information' }" class="py-0.5 duration-150 px-2 rounded-sm bg-gray-400 dark:bg-gray-900/45 hover:bg-gray-500 dark:hover:bg-gray-900/80">
+                            <span class="drop-shadow-btn">Information</span>
+                        </div>
+                        <div @click="tab = 'empty'" :class="{ 'bg-gray-500 dark:bg-gray-900/80 pb-2': tab === 'empty' }" class="py-0.5 duration-150 px-2 rounded-sm bg-gray-400 dark:bg-gray-900/45 hover:bg-gray-500 dark:hover:bg-gray-900/80">
+                            <span class="drop-shadow-btn">empty</span>
+                        </div>
+                    </div>
+    
+                    <div x-show="tab === 'information'" class="w-full mt-4 space-y-1 text-justify">
+                        <h2 class="text-lg font-bold underline decoration-4 decoration-">EPE information</h2>
+    
+                        <h3 class="pt-1 font-semibold underline decoration-2 decoration-">Commands</h3>
+                        <p class="px-1">On the left, you'll find a menu displaying a list of executable commands, each accessible by clicking its corresponding button. Some commands (e.g., database reset) may require additional confirmation before proceeding. You can mark commands as favorites by selecting the star icon next to it, which will pin the button to the top of the menu for easy access. You can rearrange your favorite commands by clicking and dragging the handle located to the left of the favorited command.</p>
+    
+                        <h3 class="pt-1 font-semibold underline decoration-2 decoration-">Logs</h3>
+                        <p class="px-1">If you need to review your past actions or troubleshoot unusual app behavior, a detailed log of almost every action is maintained. These logs, compatible with YALV, are stored in the logs folder within your AppData directory (%AppData%/EPE/logs).</p>
+                    </div>
+                    <div x-show="tab === 'empty'" class="w-full mt-4 space-y-1 text-justify">
+                        <p>empty</p>
+    
+                    </div>
+    
+                </div>
+            </div>
+
+            <div id="inputWindow" class="absolute hidden z-40 w-[798px] h-[515px] max-h-[515px] text-gray-800 dark:text-gray-300 bg-gray-300/90 top-8 dark:bg-gray-800/90 backdrop-blur-sm select-none">
+                <div class="flex flex-col items-center justify-between w-full h-full p-6 space-y-2 overflow-y-scroll scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-500">
+                    <div class="flex flex-col items-center">
+                        <div class="text-sm">Input required for command:</div>
+                        <h2 id="inputTitle" class="text-xl font-bold text-epe"><!--Command Name--></h2>
+                    </div>
+
+                    <div id="inputFields" class="flex flex-col text-sm w-[600px]">
+                        <!--Input Fields from command-->
+                    </div>
+
+                    <div id="controlButtons" class="flex flex-row justify-center w-full space-x-3">
+                        <div id="submitUserInput" class="px-2 py-1 text-sm text-center rounded-sm cursor-pointer bg-epe hover:bg-epe-active">
+                            <span class="text-gray-300 drop-shadow-btn">Submit and continue</span>
+                        </div type="submit">
+                        <div id="cancelUserInput" class="px-2 py-1 text-sm text-center rounded-sm cursor-pointer hover:bg-gray-500 group">
+                            <span class="group-hover:drop-shadow-btn group-hover:text-gray-300">Stop execution</span>
+                        </div type="submit">
+                    </div>
+                    
+                    
+                </div>
+            </div>
+
+        </div>
+
+        <div id="footer" class="flex flex-row items-center select-none h-12 p-0.5 px-2 bg-[#e8e4e4] dark:bg-gray-900 text-gray-700 dark:text-gray-200 space-x-4 justify-between border-x border-b border-gray-500 dark:border-gray-700">
+
+            <div id="settingsButtons" class="flex flex-row space-x-2">
+
+                <div id="appTheme" data-tooltip="Switch between light and dark theme." class="rounded-sm cursor-pointer has-tooltip hover:text-gray-200 hover:bg-epe-active size-8">
+                    <svg id="lightTheme" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden m-1 size-6 drop-shadow-btn">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+                    <svg id="darkTheme" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="m-1.5 size-5 drop-shadow-btn">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>                                                                   
+                </div>
+
+                <div id="appInfo" data-tooltip="Click to show app information." class="rounded-sm cursor-pointer has-tooltip hover:text-gray-200 hover:bg-epe-active size-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="m-1 size-6 drop-shadow-btn">
+                        <path stroke-linecap="round" class="size" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                    </svg>                       
+                </div>
+            </div>
+
+            <div id="tooltip" class="flex flex-row items-center w-full space-x-1">
+                <div id="tooltip-icon" class="hidden text-gray-500 ">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                        <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 .99 1.667c-.459.134-1.033.566-1.033 1.29v.25a.75.75 0 1 0 1.5 0v-.115a2.5 2.5 0 1 0-2.518-4.153.75.75 0 1 0 1.061 1.06Z" clip-rule="evenodd" />
+                    </svg>                                     
+                </div>
+                <div id="tooltip-area" class="pr-[44px] text-sm">
+                    <!--Tooltip text goes here-->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

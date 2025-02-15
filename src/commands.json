@@ -1,0 +1,269 @@
+{
+    "menu": [
+        { "menu-id": "examples", "name": "Examples" },
+        { "menu-id": "error-examples", "name": "Error examples", "parent": "examples" },
+        { "menu-id": "input-examples", "name": "Input examples", "parent": "examples" },
+
+
+        { "menu-id": "apps", "name": "Applications" },
+        { "menu-id": "install", "name": "Installations", "parent": "apps" },
+
+        { "menu-id": "configs", "name": "Configs" },
+        { "menu-id": "configs-advanced", "name": "Advanced", "parent": "configs" },
+
+        { "menu-id": "services", "name": "Services" },
+        { "menu-id": "force-stop-services", "name": "Force stop services", "parent": "services" },
+
+        { "menu-id": "server-admin", "name": "Server administration" },
+
+        { "menu-id": "simulators", "name": "Simulators" },
+
+        { "menu-id": "advanced-scripts", "name": "Advanced scripts" }
+    ],
+    "commands":[
+        {
+            "id":"restart-spooler",
+            "options":{
+                "name":"Restart service - Spooler",
+                "description":"Starts/restarts the Spooler service.",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"restartServices.ps1",
+                    "service":"Spooler"
+                }
+            ]
+        },
+        {
+            "id":"example-read-host",
+            "options":{
+                "name":"Read-Host input example",
+                "description":"Shows the input handling for Read-Host command.",
+                "menu-id":"input-examples"
+            },
+            "scripts":[
+                {
+                    "path":"exampleReadHost.ps1"
+                }
+            ]
+        },
+        {
+            "id":"error-missing-script-file",
+            "options":{
+                "name":"Error - missing file",
+                "description":"Error message when the script file is missing.",
+                "menu-id":"error-examples"
+            },
+            "scripts":[
+                {
+                    "path":"nonExistingScriptFile.ps1"
+                }
+            ]
+        },
+        {
+            "id":"error-missing-script",
+            "options":{
+                "name":"Error - missing script",
+                "description":"Error message when the command or script inside the command is not defined.",
+                "menu-id":"error-examples"
+            }
+        },
+        {
+            "id":"error-powershell",
+            "options":{
+                "name":"Error - powershell error",
+                "description":"Error inside powershell.",
+                "menu-id":"error-examples"
+            },
+            "scripts":[
+                {
+                    "path":"powershellError.ps1"
+                }
+            ]
+        },
+        {
+            "id":"error-powershell-custom",
+            "options":{
+                "name":"Error - ps custom error",
+                "description":"Error inside powershell via Write-Host.",
+                "menu-id":"error-examples"
+            },
+            "scripts":[
+                {
+                    "path":"powershellError.ps1",
+                    "customerror": true
+                }
+            ]
+        },
+        {
+            "id":"error-script-alteration",
+            "options":{
+                "name":"Error - script alteration",
+                "description":"Execution is stopped if the script file was altered after building the app.",
+                "menu-id":"error-examples"
+            },
+            "scripts":[
+                {
+                    "path":"scriptAlteration.ps1"
+                }
+            ]
+        },
+        {
+            "id":"step",
+            "options":{
+                "name":"Step example",
+                "description": "Shows default confirmation overlay.",
+                "type": "step-button",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"secondScript.ps1"
+                }
+            ]
+        },
+        {
+            "id":"step-custom",
+            "options":{
+                "name":"Step example - custom message",
+                "description": "Shows confirmation overlay with custom confirmation message.",
+                "type": "step-button",
+                "confirmation": "Custom confirmation message. Would you like to continue executing the command?",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"secondScript.ps1"
+                }
+            ]
+        },
+        {
+            "id":"multiple-scripts",
+            "options":{
+                "name":"Multi script execution",
+                "description":"Multiple scripts can be defined for a single command.",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"simpleWriteHost.ps1",
+                    "output": "first script."
+                },
+                {
+                    "path":"simpleWriteHost.ps1",
+                    "output": "second script."
+                },
+                {
+                    "path":"simpleWriteHost.ps1",
+                    "output": "third script."
+                },
+                {
+                    "path":"simpleWriteHost.ps1",
+                    "output": "fourth script."
+                },
+                {
+                    "path":"simpleWriteHost.ps1",
+                    "output": "fifth script."
+                }
+            ]
+        },
+        {
+            "id":"style-output",
+            "options":{
+                "name":"Styling the output",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"styleOutput.ps1"
+                }
+            ]
+        },
+        {
+            "id":"input-before-execution",
+            "options":{
+                "name":"Input before execution",
+                "menu-id":"input-examples"
+            },
+            "scripts":[
+                {
+                    "path":"requestInput.ps1",
+                    "inputs": [
+                        {
+                            "name": "username", 
+                            "labelName": "Write your name",
+                            "description": "Description like this can be defined. Also, this field is required.",
+                            "type": "text"
+                        },
+                        {
+                            "name": "usersurname", 
+                            "labelName": "Write your surname", 
+                            "description": "Default value can be defined for text/password fields.(also serves as placeholder for text field)",
+                            "default": "Doe",
+                            "type": "text",
+                            "required": false
+                        },
+                        {
+                            "name": "validation", 
+                            "labelName": "Your age", 
+                            "description": "Validation rules can be defined - alpha, alphaWithSpaces, numeric, alphanumeric, alphanumericWithSpaces and none(default)",
+                            "type": "text",
+                            "validation": "numeric"
+                        },
+                        {
+                            "name": "userpassword", 
+                            "labelName": "Write your password", 
+                            "default": "1234",
+                            "type": "password",
+                            "required": false
+                        },
+                        {
+                            "name": "checkbox1", 
+                            "labelName": "Do you like PowerShell?", 
+                            "type": "checkbox",
+                            "checked": true
+                        },
+                        {
+                            "name": "checkbox2", 
+                            "labelName": "Do you like JavaScript?", 
+                            "type": "checkbox",
+                            "checked": false
+                        },
+                        {
+                            "name": "folder", 
+                            "labelName": "Choose any folder",
+                            "type": "chooseDir"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id":"predefined-1",
+            "options":{
+                "name":"Predefined input 1",
+                "menu-id":"input-examples"
+            },
+            "scripts":[
+                {
+                    "path":"staticInput.ps1",
+                    "test": "ONE"
+                }
+            ]
+        },
+        {
+            "id":"predefined-2",
+            "options":{
+                "name":"Predefined input 2",
+                "menu-id":"input-examples"
+            },
+            "scripts":[
+                {
+                    "path":"test/file.ps1",
+                    "test": "TWO"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+{
+  "name": "epe",
+  "productName": "EPE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/mainProcess.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./dist/styles.css --watch",
+    "prod": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify",
+    "start": "electron .",
+    "build": "electron-builder",
+    "hash": "node src\\saveScriptHashes.js",
+    "compile": "node compileInstaller.js",
+    "deploy": "npm prune && npm run prod && npm run hash && npm run build && npm run compile"
+  },
+  "keywords": [],
+  "author": "vacadam.github",
+  "license": "ISC",
+  "dependencies": {
+    "clean": "^4.0.2",
+    "electron-log": "^5.2.4",
+    "he": "^1.2.0",
+    "sortablejs": "^1.15.6"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "innosetup-compiler": "^6.3.1",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.15"
+  },
+  "build": {
+    "appId": "epe.vacadam.github",
+    "productName": "EPE",
+    "files": [
+      "**/*",
+      "!**/README.md",
+      "!**/src/scripts/**",
+      "!**/installSetup.iss",
+      "!**/EPEicon.ico"
+    ],
+    "directories": {
+      "output": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "EPEicon.ico"
+    },
+    "nsis": {
+      "runAfterFinish": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "oneClick": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "target": null
+    },
+    "extraFiles": [
+      {
+        "from": "src/scripts",
+        "to": "resources/scripts"
+      }
+    ]
+  }
+}

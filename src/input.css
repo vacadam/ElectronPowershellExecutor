@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+body {
+    @apply font-sans;
+  }
+*/
+code {
+    @apply text-xs underline;
+}
+
+@layer components {
+    
+    @keyframes pop {
+        50% {
+          transform: scale(1.05);
+        }
+    }
+    .pop {
+        animation-name: pop;
+        animation-duration: 0.15s;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+    }
+    .pop-none { /* apply during sortableJS event*/
+        animation-name: pop;
+        animation-duration: 0s;
+        animation-timing-function: linear;
+        animation-iteration-count: 0;
+    }
+
+    @keyframes upAndDown {
+        25% {
+            transform: translateY(2px);
+        }
+        75% {
+            transform: translateY(-2px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+    .upAndDown { /* sortablejs handle */
+        animation-name: upAndDown;
+        animation-duration: 0.45s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    .button-glow {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        transition-duration: 0.3s;
+        transition-property: box-shadow;
+    }
+      .button-glow:hover {
+        box-shadow: 0 0 4px rgb(0, 0, 0, 0.3);
+    }
+    .button-glow-dark {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        transition-duration: 0.3s;
+        transition-property: box-shadow;
+    }
+      .button-glow-dark:hover {
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+    }
+
+    @keyframes warningIcon {
+        30% {
+            transform: scale(1.2);
+        }
+        35% {
+            transform: scale(1.2);
+        }
+        40% {
+            transform: rotate(14deg);
+        }
+        45% {
+            transform: rotate(-14deg);
+        }
+        50% {
+            transform: rotate(14deg);
+        }
+        55% {
+            transform: rotate(-14deg);
+        }
+        60% {
+            transform: rotate(14deg);
+        }
+        65% {
+            transform: rotate(-14deg);
+        }
+        70% {
+            transform: rotate(0deg);
+        }
+    }
+    .warningIcon {
+        animation-name: warningIcon;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+    }
+    
+    .command-button {
+        @apply flex w-full px-2 py-1 text-gray-200 duration-150 rounded-l-sm cursor-pointer select-none bg-epe hover:bg-epe-active hover:pop button-glow dark:button-glow-dark;
+    }
+    .step-button {
+        @apply flex w-full px-2 py-1 text-gray-200 duration-150 rounded-l-sm cursor-pointer select-none bg-epe hover:bg-epe-active hover:pop button-glow dark:button-glow-dark;
+    }
+    .button-span {
+        @apply self-center duration-150 font-medium text-sm group-hover:translate-x-1 drop-shadow-btn line-clamp-1;
+    }
+    .favorite-button {
+        @apply flex items-center w-6 text-gray-300 align-middle rounded-r-sm cursor-pointer bg-epe hover:bg-epe-active;
+    }
+    .sorting.command-button:hover {
+        @apply bg-epe transform-none group-hover:transform-none pop-none;
+    }
+    .sorting.step-button:hover {
+        @apply bg-epe transform-none group-hover:transform-none pop-none;
+    }
+    .sortingSibling {
+        @apply group-hover:transform-none transform-none pop-none;
+    }
+    .sortghost {
+        @apply border-4 border-epe-active;
+    }
+    .menu-category {
+        @apply flex flex-row items-center self-start w-full py-1 space-x-1 cursor-pointer select-none hover:text-epe hover:font-semibold hover:underline;
+    }
+    .menu-items {
+        @apply pl-2 space-y-1 overflow-hidden border-l border-gray-500;
+        transition: max-height 300ms ease-in-out;
+        max-height: 0;
+    }
+    .menu-items.open {
+        @apply max-h-fit;
+    }
+    .input-field {
+        @apply w-1/2 px-2 bg-gray-200 border border-transparent rounded-sm outline-none select-text dark:bg-gray-700 placeholder:italic focus:border-epe focus:bg-gray-100 dark:focus:bg-gray-800 h-7 relative;
+    }
+    .input-checkbox {
+        @apply self-start h-5 px-2 bg-gray-200 rounded-sm outline-none select-text basis-1/2 accent-epe dark:bg-gray-700;
+    }
+    .input-chooseDir {
+        @apply flex flex-row items-center self-start w-1/2 px-2 py-1 space-x-2 bg-gray-200 border border-transparent rounded-sm cursor-pointer basis-1/2 dark:bg-gray-700 hover:border-epe;
+    }
+    .input-group {
+        @apply flex flex-row flex-wrap items-center justify-between my-2;
+    }
+
+    @keyframes bounce {
+        0% { transform: translateY(-50px); }
+    }
+
+    .output {
+        @apply px-1 py-0.5 break-words duration-75 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-900 hover:drop-shadow;
+        @apply border-b dark:border-gray-900/50 border-gray-500/50 last:border-transparent dark:last:border-transparent;
+        @apply first:font-medium first:text-epe dark:first:text-epe-active first:output-shadow;
+        animation: bounce 0.25s linear;
+    }
+    .output-shadow {
+        text-shadow: 0 0 10px rgba(0, 141, 135, 0.5), 0 0 15px rgba(0, 204, 194, 0.2);
+    }
+
+    .error-output {
+        @apply text-red-600 dark:text-red-400;
+        text-shadow: none;
+    }
+    .config-settings {
+        @apply flex flex-col w-full *:py-1 overflow-hidden;
+        transition: max-height 300ms ease-in-out;
+        max-height: 0;
+    }
+    
+    .loader {
+        @apply w-full h-full rounded-full border-t-8 border-t-epe border-r-8 border-r-transparent;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: loader-rotation 1s linear infinite;
+    }
+    .loader::after {
+        @apply absolute w-full h-full rounded-full border-l-8 border-l-epe-active border-b-8 border-b-transparent top-0 left-0;
+        content: '';
+        box-sizing: border-box;
+        animation: loader-rotation 0.5s linear infinite reverse;
+    }
+    @keyframes loader-rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    } 
+   
+    @keyframes pulse {
+        0% { box-shadow: 0 0 10px rgba(0, 141, 135, 0.1); }
+        50% { box-shadow: 0 0 10px rgba(0, 141, 135, 1); }
+        100% { box-shadow: 0 0 10px rgba(0, 141, 135, 0.1); }
+    }
+    
+    .pulsing {
+        animation: pulse 1s infinite;
+    }
+
+
+}
