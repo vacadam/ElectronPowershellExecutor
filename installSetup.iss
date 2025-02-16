@@ -9,7 +9,7 @@ AppId={{5D1C408B-3C70-495C-B607-69AAD80A8691}
 AppName=EPE
 AppVersion={#AppVersion}
 ;AppVerName=EPE {#AppVersion}
-AppPublisher=github.vacadam
+AppPublisher=XY
 DefaultDirName={autopf}\EPE
 ; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
 ; on anything but x64 and Windows 11 on Arm.
