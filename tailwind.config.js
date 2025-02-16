@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin');
 
-
 module.exports = {
   content: ["./**/*.{html,js}", "!./node_modules"],
   darkMode: 'class',
@@ -12,8 +11,8 @@ module.exports = {
             chakra: ['"Chakra Petch"', 'serif'],
         },
         colors: {
-            'epe': '#008d87',
-            'epe-active': '#00b2a9',
+            'epe': '#0369a1',
+            'epe-active': '#0ea5e9',
             'gray': {
                 "600": "#4a4a4a",
                 "700": "#363636",

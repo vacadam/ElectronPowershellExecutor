@@ -89,7 +89,7 @@ async function spawnPowershell(script, mainWindow, commandName) {
     const scriptPath = app.isPackaged
     ? path.join(process.resourcesPath, "scripts", script.path)
     : path.join(__dirname, "scripts", script.path);
-    console.log(scriptPath);
+
     if (!fs.existsSync(scriptPath)) {
         mainWindow.webContents.send("write-output", "<span class='error-output'>Provided script path refers to a non-existing script file.<br>"+scriptPath)+"</span>";
         logYALV('Command execution failed, no such script file exists: ' + scriptPath);

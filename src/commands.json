@@ -22,6 +22,18 @@
     ],
     "commands":[
         {
+            "id":"ps-example",
+            "options":{
+                "name":"Example",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"psExample.ps1"
+                }
+            ]
+        },
+        {
             "id":"restart-spooler",
             "options":{
                 "name":"Restart service - Spooler",
@@ -228,7 +240,7 @@
                             "name": "checkbox2", 
                             "labelName": "Do you like JavaScript?", 
                             "type": "checkbox",
-                            "checked": false
+                            "checked": true
                         },
                         {
                             "name": "folder", 
