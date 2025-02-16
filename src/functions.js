@@ -119,6 +119,7 @@ async function spawnPowershell(script, mainWindow, commandName) {
         }
     }
 
+    script.chain = { ...chainData };
     const commandDataJson = JSON.stringify(script).replace(/"/g, '\\"');
     const powershell = spawn(powershellVersion, [
             "-ExecutionPolicy", "Bypass",
@@ -126,9 +127,6 @@ async function spawnPowershell(script, mainWindow, commandName) {
             "-jsondata", `"${commandDataJson}"`,
         ], { shell: true }
     );
-
-
-
 
     powershell.stdout.on("data", (data) => {
         let output = data.toString().trim();
@@ -145,6 +143,9 @@ async function spawnPowershell(script, mainWindow, commandName) {
             output = output.replace("[INPUT]", "").trim();
             mainWindow.webContents.send("write-output", output);
             mainWindow.webContents.send("request-read-host");
+        } else if(isJsonString(output)) {
+            const parsedOutput = JSON.parse(output);
+            Object.assign(chainData, parsedOutput);
         } else {
             mainWindow.webContents.send("write-output", output);
         }       
@@ -175,6 +176,7 @@ async function spawnPowershell(script, mainWindow, commandName) {
     }
 }
 
+let chainData = {};
 async function executeCommand(command, mainWindow) {
     let scriptsIndex = 0;
     let requirementNotMet = false;
@@ -205,6 +207,7 @@ async function executeCommand(command, mainWindow) {
         }
         scriptsIndex++;
     }
+    chainData = {};
     mainWindow.webContents.send("command-finished");
 
     if (mainWindow.isMinimized()) {
@@ -257,5 +260,14 @@ async function getHashFromJson(script) {
     } catch (error) {
         logYALV('error', 'Error while getting hash from scriptHash.json file:' + error);
         return error;
+    }
+}
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+        return true;
+    } catch (e) {
+        return false;
     }
 }
