@@ -160,7 +160,7 @@ code {
         animation: bounce 0.25s linear;
     }
     .output-shadow {
-        text-shadow: 0 0 10px rgba(0, 141, 135, 0.5), 0 0 15px rgba(0, 204, 194, 0.2);
+        text-shadow: 0 0 10px rgba(3, 105, 161, 0.5), 0 0 15px rgba(3, 105, 161, 0.2);
     }
 
     .error-output {
@@ -195,9 +195,9 @@ code {
     } 
    
     @keyframes pulse {
-        0% { box-shadow: 0 0 10px rgba(0, 141, 135, 0.1); }
-        50% { box-shadow: 0 0 10px rgba(0, 141, 135, 1); }
-        100% { box-shadow: 0 0 10px rgba(0, 141, 135, 0.1); }
+        0% { box-shadow: 0 0 10px rgba(3, 105, 161, 0.1); }
+        50% { box-shadow: 0 0 10px rgba(3, 105, 161, 1); }
+        100% { box-shadow: 0 0 10px rgba(3, 105, 161, 0.1); }
     }
     
     .pulsing {
