@@ -236,14 +236,14 @@ For scripts that require conditional input (input that isn't needed every time t
 
 #### The issue
 If we use Read-Host normally:
-```ps
+```powershell
 $input = Read-Host "What's your name"
 ```
 The script will become stuck because PowerShell does not provide any stdout output for this operation. As a result, the Electron application does not detect that input is required, causing the process to hang indefinitely.
 
 #### Solution:
 To signal that user input is required, we must use Write-Host before Read-Host:
-```ps
+```powershell
 Write-Host '[INPUT] Would you like me to show you system information? (yes/no)'
 $sysInfo = Read-Host
 ```
