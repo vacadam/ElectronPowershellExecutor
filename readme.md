@@ -25,6 +25,11 @@ This is an ElectronJS application designed to run PowerShell scripts directly fr
     - logs are in log4j format (my preference), but this can be changed (app is using electron-log npm package)
 
 
+
+https://github.com/user-attachments/assets/1e55e994-e2b2-4e4b-aed5-4e5f01ca0fd3
+
+
+
 ## Structure of *commands.json* and examples
 
 ### Very basic example
