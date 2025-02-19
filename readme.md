@@ -83,6 +83,7 @@ Currently there are three ways of providing data to scripts:
 - Static/predefined data
 - Dynamic input handling before the script runs
 - Dynamic input handling during script execution (Read-Host)
+- Output as an input for chained script
 
 ### Static/predefined data
 As mentioned earlier, these are the attributes from the json file defined for each script.
@@ -263,8 +264,9 @@ By prefixing the message with [INPUT], the Electron application can:
 
 This approach ensures seamless real-time interaction between the Electron application and PowerShell scripts, allowing dynamic input handling without causing scripts to hang.
 
-## Running multiple scripts
-If needed, multiple scripts can be defined within a single command.
+### Output as an input for chained script
+
+It is possible to chain multiple scripts within a single command, and it is also possible to use output from the script as an input for all subsequent chained scripts.
 ```json
 {
     "id":"restart-multiple-services",
@@ -287,6 +289,23 @@ If needed, multiple scripts can be defined within a single command.
         }
     ]
 }
+```
+
+To provide the output as an input, it is neccessary to output the data as JSON.
+```powershell
+# 1st chained script
+$object = @{"foo" = "bar"} | ConvertTo-Json
+Write-host $object
+```
+When this is done, we can access this data in all subsequent scripts from -jsondata parameter where it is stored in *chain* object.
+```powershell
+# 2nd chained script
+param (
+    [string]$jsondata
+)
+$data = $jsondata | ConvertFrom-Json
+
+$data.chain.foo #bar
 ```
 
 
