@@ -276,6 +276,33 @@
                     "test": "TWO"
                 }
             ]
+        },
+        {
+            "id":"chain-output",
+            "options":{
+                "name":"Chaining output",
+                "menu-id":"examples"
+            },
+            "scripts":[
+                {
+                    "path":"chainExample.ps1"
+                },
+                {
+                    "path":"chainExample.ps1"
+                },
+                {
+                    "path":"chainExample.ps1"
+                },
+                {
+                    "path":"chainExample.ps1"
+                },
+                {
+                    "path":"chainExample.ps1"
+                },
+                {
+                    "path":"chainExample.ps1"
+                }
+            ]
         }
     ]
 }

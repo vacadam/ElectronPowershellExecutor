@@ -119,6 +119,7 @@ async function spawnPowershell(script, mainWindow, commandName) {
         }
     }
 
+    script.chain = { ...chainData };
     const commandDataJson = JSON.stringify(script).replace(/"/g, '\\"');
     const powershell = spawn(powershellVersion, [
             "-ExecutionPolicy", "Bypass",
@@ -127,46 +128,26 @@ async function spawnPowershell(script, mainWindow, commandName) {
         ], { shell: true }
     );
 
-
-
-
     powershell.stdout.on("data", (data) => {
-        let output = data.toString().trim();
-        output = output.replace(/\x1B\[[0-9;]*[mK]/g, ""); // PS7 ansi escape codes
-        if (output.startsWith("[ERROR]")) {
-            output = output.replace("[ERROR]", "").trim();
-            mainWindow.webContents.send("write-output", `<span class="error-output">${output}</span>`);
-            logYALV('warn', output);
-        } else if (output.startsWith("[XML]")) {
-            output = output.replace("[XML]", "").trim();
-            mainWindow.webContents.send("write-output", output, true);
-            logYALV(output);
-        } else if(output.startsWith("[INPUT]")) {
-            output = output.replace("[INPUT]", "").trim();
-            mainWindow.webContents.send("write-output", output);
-            mainWindow.webContents.send("request-read-host");
-        } else {
-            mainWindow.webContents.send("write-output", output);
-        }       
+        handlePowershellOutput(data, mainWindow, false);      
     });
 
     ipcMain.on("submit-read-host", (event, message) => {
+        logYALV('Read-Host input provided: ' + message);
         powershell.stdin.write(message + "\r\n");
     });
 
     powershell.stderr.on("data", (data) => {
-        output = data.toString().trim();
-        output = output.replace(/\x1B\[[0-9;]*[mK]/g, ""); // PS7 ansi escape codes
-        mainWindow.webContents.send("write-output", 
-            `<span class="error-output">Error: ${output}</span>`);
-        logYALV("error", output);
+        handlePowershellOutput(data, mainWindow, true); 
     });
     await new Promise((resolve, reject) => {
         powershell.on("close", (code) => {
             if (code === 0) {
                 resolve();
             } else {
-                reject(new Error(`Script failed with exit code ${code}`));
+                mainWindow.webContents.send("write-output", `<span class="error-output">Script failed with exit code ${code}</span>`);
+                logYALV("error", `Script failed with exit code ${code}`);
+                resolve();
             }
         });
     });
@@ -175,6 +156,7 @@ async function spawnPowershell(script, mainWindow, commandName) {
     }
 }
 
+let chainData = {};
 async function executeCommand(command, mainWindow) {
     let scriptsIndex = 0;
     let requirementNotMet = false;
@@ -205,6 +187,7 @@ async function executeCommand(command, mainWindow) {
         }
         scriptsIndex++;
     }
+    chainData = {};
     mainWindow.webContents.send("command-finished");
 
     if (mainWindow.isMinimized()) {
@@ -257,5 +240,54 @@ async function getHashFromJson(script) {
     } catch (error) {
         logYALV('error', 'Error while getting hash from scriptHash.json file:' + error);
         return error;
+    }
+}
+
+function handlePowershellOutput(data, mainWindow, error) {
+    let output = data.toString().trim().replace(/\x1B\[[0-9;]*[mK]/g, "");
+    const prefix = {
+        error: "[ERROR]",
+        xml: "[XML]",
+        input: "[INPUT]",
+    };
+
+    if (error || output.startsWith(prefix.error)) {
+        if (output.startsWith(prefix.error)) {
+            output = output.slice(prefix.error.length).trim();
+            logYALV('warn', output);
+        } else {
+            logYALV("error", output);
+            output = `Error: ${output}`;
+        }
+        mainWindow.webContents.send("write-output", `<span class="error-output">${output}</span>`);
+        return;
+    }
+
+    const tryParseJson = (str) => {
+        try {
+            return { success: true, data: JSON.parse(str) };
+        } catch (e) {
+            return { success: false };
+        }
+    };
+
+    if (output.startsWith(prefix.xml)) {
+        output = output.slice(prefix.xml.length).trim();
+        mainWindow.webContents.send("write-output", output, true);
+        logYALV(output);
+        return;
+    } else if(output.startsWith(prefix.input)) {
+        output = output.slice(prefix.input.length).trim();
+        mainWindow.webContents.send("write-output", output);
+        mainWindow.webContents.send("request-read-host");
+        logYALV('Read-Host Input request received.');
+        return;
+    }
+
+    const parsedJson = tryParseJson(output);
+    if (parsedJson.success) {
+        Object.assign(chainData, parsedJson.data);
+    } else {
+        mainWindow.webContents.send("write-output", output);
     }
 }
