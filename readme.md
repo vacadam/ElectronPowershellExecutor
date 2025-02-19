@@ -79,7 +79,7 @@ https://github.com/user-attachments/assets/1e55e994-e2b2-4e4b-aed5-4e5f01ca0fd3
 Property **scripts** have only three reserved properties - path, requirement("pwsh" if required) and inputs(described below). Any other defined properties are passed to the powershell script as data (described in next section).
 
 ## Providing data to script
-Currently there are three ways of providing data to scripts:
+Currently there are four ways of providing data to scripts:
 - Static/predefined data
 - Dynamic input handling before the script runs
 - Dynamic input handling during script execution (Read-Host)
