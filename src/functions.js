@@ -132,10 +132,12 @@ async function spawnPowershell(script, mainWindow, commandName) {
         handlePowershellOutput(data, mainWindow, false);      
     });
 
-    ipcMain.on("submit-read-host", (event, message) => {
-        logYALV('Read-Host input provided: ' + message);
-        powershell.stdin.write(message + "\r\n");
-    });
+    if (!ipcMain.listenerCount("submit-read-host")) {
+        ipcMain.on("submit-read-host", (event, message) => {
+            logYALV("Read-Host input provided: " + message);
+            powershell.stdin.write(message + "\r\n");
+        });
+    }
 
     powershell.stderr.on("data", (data) => {
         handlePowershellOutput(data, mainWindow, true); 
