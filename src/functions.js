@@ -144,6 +144,7 @@ async function spawnPowershell(script, mainWindow, commandName) {
     });
     await new Promise((resolve, reject) => {
         powershell.on("close", (code) => {
+            ipcMain.removeAllListeners("submit-read-host");
             if (code === 0) {
                 resolve();
             } else {
