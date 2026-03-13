@@ -1,4 +1,4 @@
-# Electron PowerShell Executor - EPE
+# DEPRECATED
 
 This is an ElectronJS application designed to run PowerShell scripts directly from the app using Node.js child processes. The app captures the script output in real-time and displays it in the interface, providing a seamless way to execute and monitor PowerShell commands.
 
